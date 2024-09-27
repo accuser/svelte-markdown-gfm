@@ -21,3 +21,12 @@ html,
 body {
 	@apply bg-white dark:bg-slate-900;
 }
+
+li:has(input[type='checkbox']) {
+	@apply list-none;
+
+	& input[type='checkbox'] {
+		@apply align-middle;
+		margin: 0 0.5rem 0 -1.5rem;
+	}
+}
