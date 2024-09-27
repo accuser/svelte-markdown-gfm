@@ -1,13 +1,10 @@
-<script lang="ts" module>
-	export type Props = import('mdast').Heading;
-</script>
-
 <script lang="ts">
 	import { Node } from '@accuser/svelte-markdown-provider';
+	import type { Heading } from 'mdast';
 
-	let { children, data, depth }: Props = $props();
+	let { children, data, depth }: Heading = $props();
 
-	let { id } = $derived(data as import('mdast').HeadingData);
+	let id = $derived(data?.id);
 	let tag = $derived.by(() => `h${depth}`);
 </script>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import mdast from '../extensions/mdast.js';
+	import localMdastExtensions from '../extensions/local-mdast-extensions.js';
 	import { Markdown } from '@accuser/svelte-markdown-provider';
 	import { gfmFromMarkdown } from 'mdast-util-gfm';
 	import { gfm } from 'micromark-extension-gfm';
@@ -9,19 +9,27 @@
 
 	type Props = ComponentProps<Markdown>;
 
-	let { components: _components = {}, directives, options: _options = {}, src }: Props = $props();
+	let { ast, components: _components, directives, options: _options, src }: Props = $props();
 
-	let components = $derived.by(() => ({
-		heading: Heading,
-		listItem: ListItem,
-		..._components
-	}));
+	let components = $derived.by(() => {
+		const { ...rest } = _components ?? {};
 
-	let options = $derived.by(() => ({
-		..._options,
-		extensions: [...(_options.extensions ?? []), gfm()],
-		mdastExtensions: [...(_options.mdastExtensions ?? []), gfmFromMarkdown(), mdast()]
-	}));
+		return {
+			heading: Heading,
+			listItem: ListItem,
+			...rest
+		};
+	});
+
+	let options = $derived.by(() => {
+		const { extensions = [], mdastExtensions = [], ...rest } = _options ?? {};
+
+		return {
+			extensions: [...extensions, gfm()],
+			mdastExtensions: [...mdastExtensions, gfmFromMarkdown(), localMdastExtensions()],
+			...rest
+		};
+	});
 </script>
 
 <Markdown {components} {directives} {options} {src} />

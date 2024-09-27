@@ -1,6 +1,6 @@
 import { render } from '@testing-library/svelte';
 import { describe, expect, test } from 'vitest';
-import Heading, {} from './Heading.svelte';
+import Heading from './Heading.svelte';
 describe('Heading.svelte', async () => {
     for (const depth of [1, 2, 3, 4, 5, 6]) {
         const it = test.extend({
