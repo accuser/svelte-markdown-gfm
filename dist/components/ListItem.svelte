@@ -5,8 +5,6 @@
 	let { checked, children, spread }: ListItem = $props();
 </script>
 
-<input checked={true} disabled />
-
 <li>
 	{#if typeof checked === 'boolean'}<input type="checkbox" {checked} disabled />{/if}
 	{#each children as node}<Node {...node} />{/each}

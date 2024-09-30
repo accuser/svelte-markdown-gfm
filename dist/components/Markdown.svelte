@@ -7,9 +7,9 @@
 	import Heading from './Heading.svelte';
 	import ListItem from './ListItem.svelte';
 
-	type Props = ComponentProps<Markdown>;
+	type Props = ComponentProps<typeof Markdown>;
 
-	let { ast, components: _components, directives, options: _options, src }: Props = $props();
+	let { components: _components, options: _options, ...props }: Props = $props();
 
 	let components = $derived.by(() => {
 		const { ...rest } = _components ?? {};
@@ -22,14 +22,14 @@
 	});
 
 	let options = $derived.by(() => {
-		const { extensions = [], mdastExtensions = [], ...rest } = _options ?? {};
+		const { extensions, mdastExtensions, ...rest } = _options ?? {};
 
 		return {
-			extensions: [...extensions, gfm()],
-			mdastExtensions: [...mdastExtensions, gfmFromMarkdown(), localMdastExtensions()],
+			extensions: [...(extensions ?? []), gfm()],
+			mdastExtensions: [...(mdastExtensions ?? []), gfmFromMarkdown(), localMdastExtensions()],
 			...rest
 		};
 	});
 </script>
 
-<Markdown {components} {directives} {options} {src} />
+<Markdown {...props} {components} {options} />

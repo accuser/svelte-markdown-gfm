@@ -1,7 +1,10 @@
-import { render } from '@testing-library/svelte';
-import { describe, expect, test } from 'vitest';
+import { mount } from 'svelte';
+import { beforeEach, describe, expect, test } from 'vitest';
 import ListItem from './ListItem.svelte';
 describe('Heading.svelte', async () => {
+    beforeEach(() => {
+        document.body = document.createElement('body');
+    });
     describe('without `checked` prop', async () => {
         const it = test.extend({
             props: {
@@ -9,22 +12,27 @@ describe('Heading.svelte', async () => {
                 children: [
                     {
                         type: 'paragraph',
-                        children: [{ type: 'text', value: 'Hello, World!' }]
+                        children: [
+                            {
+                                type: 'text',
+                                value: 'Hello, World!'
+                            }
+                        ]
                     }
                 ]
             }
         });
         it('renders <li>', async ({ props }) => {
-            const { container } = render(ListItem, { props });
-            expect(container.querySelector(`li`)).toBeInTheDocument();
+            mount(ListItem, { props, target: document.body });
+            expect(document.body.querySelector(`li`)).toBeInTheDocument();
         });
         it('renders <li> without <input type="checkbox">', async ({ props }) => {
-            const { container } = render(ListItem, { props });
-            expect(container.querySelector(`li > input[type='checkbox']`)).not.toBeInTheDocument();
+            mount(ListItem, { props, target: document.body });
+            expect(document.body.querySelector(`li > input[type='checkbox']`)).not.toBeInTheDocument();
         });
         it('renders <li> with content', async ({ props }) => {
-            const { container } = render(ListItem, { props });
-            expect(container.querySelector(`li`)).toHaveTextContent('Hello, World!');
+            mount(ListItem, { props, target: document.body });
+            expect(document.body.querySelector(`li`)).toHaveTextContent('Hello, World!');
         });
     });
     describe('with `checked` prop', async () => {
@@ -42,20 +50,20 @@ describe('Heading.svelte', async () => {
                 }
             });
             it('renders <li>', async ({ props }) => {
-                const { container } = render(ListItem, { props });
-                expect(container.querySelector(`li`)).toBeInTheDocument();
+                mount(ListItem, { props, target: document.body });
+                expect(document.body.querySelector(`li`)).toBeInTheDocument();
             });
             it('renders <li> with <input type="checkbox">', async ({ props }) => {
-                const { container } = render(ListItem, { props });
-                expect(container.querySelector(`li > input[type='checkbox']`)).toBeInTheDocument();
+                mount(ListItem, { props, target: document.body });
+                expect(document.body.querySelector(`li > input[type='checkbox']`)).toBeInTheDocument();
             });
             it('renders <li> with <input type="checkbox"> and `disabled` attribute`', async ({ props }) => {
-                const { container } = render(ListItem, { props });
-                expect(container.querySelector(`li > input[type='checkbox']`)).toHaveAttribute('disabled');
+                mount(ListItem, { props, target: document.body });
+                expect(document.body.querySelector(`li > input[type='checkbox']`)).toHaveAttribute('disabled');
             });
             it('renders <li> with content', async ({ props }) => {
-                const { container } = render(ListItem, { props });
-                expect(container.querySelector(`li`)).toHaveTextContent('Hello, World!');
+                mount(ListItem, { props, target: document.body });
+                expect(document.body.querySelector(`li`)).toHaveTextContent('Hello, World!');
             });
         }
     });
